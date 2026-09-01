@@ -1,7 +1,7 @@
 /**
  * Represents a task with a description and a done/not-done status.
  */
-public class Task {
+public  abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -39,11 +39,17 @@ public class Task {
     }
 
     /**
+     * Returns the icon representing this task's type, e.g. "T" for a todo.
+     */
+    public abstract String getTypeIcon();
+
+
+    /**
      * Returns a string representation of this task, showing its status icon and description.
      */
 
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + description;
     }
 }
