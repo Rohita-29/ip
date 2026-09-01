@@ -52,34 +52,20 @@ public class Nimbus {
      */
     private static int handleCommand(String input, Task[] tasks, int taskCount) {
         if (input.equals("list")) {
-            for (int i = 0; i < taskCount; i++) {
-                System.out.println((i + 1) + "." + tasks[i]);
-            }
+            printTaskList(tasks, taskCount);
         } else if (input.startsWith("mark ")) {
-            int index = Integer.parseInt(input.substring(5)) - 1;
-            tasks[index].markAsDone();
-            System.out.println("Nice! I've marked this task as done:");
-            System.out.println("  " + tasks[index]);
+            markTask(tasks, input.substring(5), true);
         } else if (input.startsWith("unmark ")) {
-            int index = Integer.parseInt(input.substring(7)) - 1;
-            tasks[index].markAsNotDone();
-            System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println("  " + tasks[index]);
+            markTask(tasks, input.substring(7), false);
         } else if (input.startsWith("todo ")) {
-            tasks[taskCount] = new Todo(input.substring(5));
-            taskCount++;
-            printAddedMessage(tasks[taskCount - 1], taskCount);
+            taskCount = addTask(tasks, taskCount, new Todo(input.substring(5)));
         } else if (input.startsWith("deadline ")) {
             String[] parts = input.substring(9).split(" /by ", 2);
-            tasks[taskCount] = new Deadline(parts[0], parts[1]);
-            taskCount++;
-            printAddedMessage(tasks[taskCount - 1], taskCount);
+            taskCount = addTask(tasks, taskCount, new Deadline(parts[0], parts[1]));
         } else if (input.startsWith("event ")) {
             String[] fromSplit = input.substring(6).split(" /from ", 2);
             String[] toSplit = fromSplit[1].split(" /to ", 2);
-            tasks[taskCount] = new Event(fromSplit[0], toSplit[0], toSplit[1]);
-            taskCount++;
-            printAddedMessage(tasks[taskCount - 1], taskCount);
+            taskCount = addTask(tasks, taskCount, new Event(fromSplit[0], toSplit[0], toSplit[1]));
         } else {
             System.out.println("Sorry, I don't recognise that command.");
         }
@@ -87,15 +73,51 @@ public class Nimbus {
     }
 
     /**
-     * Prints the standard "task added" confirmation message.
+     * Prints every stored task, numbered from 1.
      *
-     * @param task Task that was just added.
-     * @param taskCount Total number of tasks currently stored.
+     * @param tasks Array of tasks stored so far.
+     * @param taskCount Number of tasks currently stored.
      */
-    private static void printAddedMessage(Task task, int taskCount) {
+    private static void printTaskList(Task[] tasks, int taskCount) {
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println((i + 1) + "." + tasks[i]);
+        }
+    }
+
+    /**
+     * Marks or unmarks the task at the given 1-based index and prints a confirmation.
+     *
+     * @param tasks Array of tasks stored so far.
+     * @param indexText 1-based task number, as typed by the user.
+     * @param isDone True to mark the task as done, false to mark it as not done.
+     */
+    private static void markTask(Task[] tasks, String indexText, boolean isDone) {
+        int index = Integer.parseInt(indexText) - 1;
+        if (isDone) {
+            tasks[index].markAsDone();
+            System.out.println("Nice! I've marked this task as done:");
+        } else {
+            tasks[index].markAsNotDone();
+            System.out.println("OK, I've marked this task as not done yet:");
+        }
+        System.out.println("  " + tasks[index]);
+    }
+
+    /**
+     * Stores a new task and prints the standard "task added" confirmation message.
+     *
+     * @param tasks Array of tasks stored so far.
+     * @param taskCount Number of tasks currently stored.
+     * @param task Task to add.
+     * @return Updated task count.
+     */
+    private static int addTask(Task[] tasks, int taskCount, Task task) {
+        tasks[taskCount] = task;
+        taskCount++;
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
         System.out.println("Now you have " + taskCount + " tasks in the list.");
+        return taskCount;
     }
 }
 
