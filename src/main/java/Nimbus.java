@@ -10,6 +10,7 @@ public class Nimbus {
      *
      * @param args Command-line arguments (not used)
      */
+    private static final int MAX_TASKS=100;
     public static void main(String[] args) {
         String banner = " _   _ _           _               \n"
                 + "| \\ | (_)_ __ ___ | |__  _   _ ___ \n"
@@ -21,7 +22,8 @@ public class Nimbus {
         System.out.println("Hello! I'm " + name + ".");
         System.out.println("What can I do for you?");
 
-        Task[] tasks = new Task[100];
+
+        Task[] tasks = new Task[MAX_TASKS];
         int taskCount = 0;
 
         Scanner scanner = new Scanner(System.in);
