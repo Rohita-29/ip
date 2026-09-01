@@ -1,6 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Represents a simple command-line task-tracking chatbot names Nimbus.
+ */
+
 public class Nimbus {
+    /**
+     * Runs Nimbus chatbot, reading commands from standard input until user types "bye".
+     * @param args Command-line arguments (not used)
+     */
     public static void main(String[] args) {
         String banner = " _   _ _           _               \n"
                 + "| \\ | (_)_ __ ___ | |__  _   _ ___ \n"
