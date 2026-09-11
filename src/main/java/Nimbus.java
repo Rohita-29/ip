@@ -57,8 +57,13 @@ public class Nimbus {
             markTask(tasks, input.substring(5), taskCount, true);
         } else if (input.startsWith("unmark ")) {
             markTask(tasks, input.substring(7), taskCount, false);
-        } else if (input.startsWith("todo ")) {
-            taskCount = addTask(tasks, taskCount, new Todo(input.substring(5)));
+        } else if (input.equals("todo") || input.startsWith("todo ")) {
+            String description = input.length() > 4 ? input.substring(5).trim() : "";
+            if (description.isEmpty()) {
+                System.out.println("OOPS!!! The description of a todo cannot be empty.");
+            } else {
+                taskCount = addTask(tasks, taskCount, new Todo(description));
+            }
         } else if (input.startsWith("deadline ")) {
             String[] parts = input.substring(9).split(" /by ", 2);
             taskCount = addTask(tasks, taskCount, new Deadline(parts[0], parts[1]));
