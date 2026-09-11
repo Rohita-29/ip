@@ -66,11 +66,23 @@ public class Nimbus {
             }
         } else if (input.startsWith("deadline ")) {
             String[] parts = input.substring(9).split(" /by ", 2);
-            taskCount = addTask(tasks, taskCount, new Deadline(parts[0], parts[1]));
+            if (parts.length < 2) {
+                System.out.println("OOPS!!! Please use the format: deadline <description> /by <date>");
+            } else {
+                taskCount = addTask(tasks, taskCount, new Deadline(parts[0], parts[1]));
+            }
         } else if (input.startsWith("event ")) {
             String[] fromSplit = input.substring(6).split(" /from ", 2);
-            String[] toSplit = fromSplit[1].split(" /to ", 2);
-            taskCount = addTask(tasks, taskCount, new Event(fromSplit[0], toSplit[0], toSplit[1]));
+            if (fromSplit.length < 2) {
+                System.out.println("OOPS!!! Please use the format: event <description> /from <start> /to <end>");
+            } else {
+                String[] toSplit = fromSplit[1].split(" /to ", 2);
+                if (toSplit.length < 2) {
+                    System.out.println("OOPS!!! Please use the format: event <description> /from <start> /to <end>");
+                } else {
+                    taskCount = addTask(tasks, taskCount, new Event(fromSplit[0], toSplit[0], toSplit[1]));
+                }
+            }
         } else {
             System.out.println("Sorry, I don't recognise that command.");
         }
