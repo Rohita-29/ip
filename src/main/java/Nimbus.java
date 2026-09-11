@@ -54,9 +54,9 @@ public class Nimbus {
         if (input.equals("list")) {
             printTaskList(tasks, taskCount);
         } else if (input.startsWith("mark ")) {
-            markTask(tasks, input.substring(5), true);
+            markTask(tasks, input.substring(5), taskCount, true);
         } else if (input.startsWith("unmark ")) {
-            markTask(tasks, input.substring(7), false);
+            markTask(tasks, input.substring(7), taskCount, false);
         } else if (input.startsWith("todo ")) {
             taskCount = addTask(tasks, taskCount, new Todo(input.substring(5)));
         } else if (input.startsWith("deadline ")) {
@@ -91,8 +91,19 @@ public class Nimbus {
      * @param indexText 1-based task number, as typed by the user.
      * @param isDone True to mark the task as done, false to mark it as not done.
      */
-    private static void markTask(Task[] tasks, String indexText, boolean isDone) {
-        int index = Integer.parseInt(indexText) - 1;
+    private static void markTask(Task[] tasks, String indexText, int taskCount, boolean isDone) {
+        int index;
+        try {
+            index = Integer.parseInt(indexText) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("OOPS!!! Please give me a valid task number.");
+            return;
+        }
+
+        if (index < 0 || index >= taskCount) {
+            System.out.println("OOPS!!! That task number doesn't exist.");
+            return;
+        }
         if (isDone) {
             tasks[index].markAsDone();
             System.out.println("Nice! I've marked this task as done:");
