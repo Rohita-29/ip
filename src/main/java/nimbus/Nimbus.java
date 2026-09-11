@@ -1,3 +1,5 @@
+package nimbus;
+
 import java.util.Scanner;
 
 /**
