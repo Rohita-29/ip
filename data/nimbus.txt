@@ -1,0 +1,4 @@
+T | 1 | buy milk
+T | 0 | study Java
+D | 0 | submit assignment | Friday
+E | 0 | meeting | 2pm | 4pm

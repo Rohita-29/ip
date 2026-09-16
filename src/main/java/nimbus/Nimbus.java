@@ -17,7 +17,7 @@ public class Nimbus {
         printWelcome();
 
         Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        int taskCount = Storage.loadTasks(tasks);
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -110,6 +110,7 @@ public class Nimbus {
      *
      * @param tasks Array of tasks stored so far.
      * @param indexText 1-based task number, as typed by the user.
+     * @param taskCount Number of tasks currently stored.
      * @param isDone True to mark the task as done, false to mark it as not done.
      */
     private static void markTask(Task[] tasks, String indexText, int taskCount, boolean isDone) {
@@ -133,6 +134,7 @@ public class Nimbus {
             System.out.println("OK, I've marked this task as not done yet:");
         }
         System.out.println("  " + tasks[index]);
+        Storage.saveTasks(tasks, taskCount);
     }
 
     /**
@@ -149,6 +151,9 @@ public class Nimbus {
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
         System.out.println("Now you have " + taskCount + " tasks in the list.");
+
+        Storage.saveTasks(tasks,taskCount);
+
         return taskCount;
     }
     /**
