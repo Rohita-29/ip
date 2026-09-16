@@ -3,13 +3,14 @@ package nimbus;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
 
     private static final String FILE_PATH = "./data/nimbus.txt";
 
-    public static void saveTasks(Task[] tasks, int taskCount) {
+    public static void saveTasks(ArrayList<Task> tasks) {
         try {
             File file = new File(FILE_PATH);
             File parent = file.getParentFile();
@@ -20,9 +21,7 @@ public class Storage {
 
             FileWriter writer = new FileWriter(file);
 
-            for (int i = 0; i < taskCount; i++) {
-                Task task = tasks[i];
-
+            for (Task task : tasks) {
                 if (task instanceof Todo) {
                     writer.write("T | " + (task.isDone ? "1" : "0")
                             + " | " + task.description);
@@ -49,16 +48,15 @@ public class Storage {
         } catch (IOException e) {
             System.out.println("OOPS!!! I couldn't save your tasks.");
         }
-
     }
-    public static int loadTasks(Task[] tasks) {
+
+    public static ArrayList<Task> loadTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(FILE_PATH);
 
         if (!file.exists()) {
-            return 0;
+            return tasks;
         }
-
-        int taskCount = 0;
 
         try {
             Scanner scanner = new Scanner(file);
@@ -72,24 +70,21 @@ public class Storage {
                     if (parts[1].equals("1")) {
                         todo.markAsDone();
                     }
-                    tasks[taskCount] = todo;
-                    taskCount++;
+                    tasks.add(todo);
 
                 } else if (parts[0].equals("D")) {
                     Deadline deadline = new Deadline(parts[2], parts[3]);
                     if (parts[1].equals("1")) {
                         deadline.markAsDone();
                     }
-                    tasks[taskCount] = deadline;
-                    taskCount++;
+                    tasks.add(deadline);
 
                 } else if (parts[0].equals("E")) {
                     Event event = new Event(parts[2], parts[3], parts[4]);
                     if (parts[1].equals("1")) {
                         event.markAsDone();
                     }
-                    tasks[taskCount] = event;
-                    taskCount++;
+                    tasks.add(event);
                 }
             }
 
@@ -99,6 +94,6 @@ public class Storage {
             System.out.println("OOPS!!! I couldn't load your tasks.");
         }
 
-        return taskCount;
+        return tasks;
     }
 }
