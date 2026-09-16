@@ -59,7 +59,9 @@ public class Nimbus {
             markTask(tasks, input.substring(5), taskCount, true);
         } else if (input.startsWith("unmark ")) {
             markTask(tasks, input.substring(7), taskCount, false);
-        } else if (input.equals("todo") || input.startsWith("todo ")) {
+        } else if (input.startsWith("delete ")) {
+            taskCount = deleteTask(tasks, input.substring(7), taskCount);
+        }else if (input.equals("todo") || input.startsWith("todo ")) {
             String description = input.length() > 4 ? input.substring(5).trim() : "";
             if (description.isEmpty()) {
                 System.out.println("OOPS!!! The description of a todo cannot be empty.");
@@ -149,7 +151,48 @@ public class Nimbus {
         System.out.println("Now you have " + taskCount + " tasks in the list.");
         return taskCount;
     }
+    /**
+     * Deletes the task at the given 1-based index and prints a confirmation.
+     *
+     * @param tasks Array of tasks stored so far.
+     * @param indexText 1-based task number, as typed by the user.
+     * @param taskCount Number of tasks currently stored.
+     * @return Updated task count after deletion.
+     */
+    private static int deleteTask(Task[] tasks, String indexText, int taskCount) {
+        int index;
+
+        try {
+            index = Integer.parseInt(indexText) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("OOPS!!! Please give me a valid task number.");
+            return taskCount;
+        }
+
+        if (index < 0 || index >= taskCount) {
+            System.out.println("OOPS!!! That task number doesn't exist.");
+            return taskCount;
+        }
+
+        Task removedTask = tasks[index];
+
+        for (int i = index; i < taskCount - 1; i++) {
+            tasks[i] = tasks[i + 1];
+        }
+
+        tasks[taskCount - 1] = null;
+        taskCount--;
+
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + removedTask);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
+
+        return taskCount;
+    }
+
 }
+
+
 
 
 
