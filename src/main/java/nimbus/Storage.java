@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Saves and loads Nimbus tasks using a local text file.
+ */
+
 public class Storage {
 
     private static final String FILE_PATH = "./data/nimbus.txt";
