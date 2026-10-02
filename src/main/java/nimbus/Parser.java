@@ -1,4 +1,5 @@
 package nimbus;
+import java.time.LocalDateTime;
 
 /**
  * Interprets user commands and calls the appropriate task operations.
@@ -101,7 +102,7 @@ public class Parser {
 
         if (deadlineParts.length != 2) {
             throw new IllegalArgumentException(
-                    "Missing the details. Use: deadline <description> /by <date>");
+                    "Missing the details. Use: deadline <description> /by yyyy-MM-dd HHmm");
         }
 
         String description = deadlineParts[0].trim();
@@ -109,6 +110,7 @@ public class Parser {
 
         validateTaskField(description);
         validateTaskField(by);
+        DateTimes.parse(by);
 
         addTask(new Deadline(description, by), tasks, ui);
     }
@@ -121,14 +123,14 @@ public class Parser {
 
         if (eventParts.length != 2) {
             throw new IllegalArgumentException(
-                    "An event needs an itinerary. Use: event <description> /from <start> /to <end>");
+                    "Use: event <description> /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm");
         }
 
         String[] timeParts = eventParts[1].split(" /to ", 2);
 
         if (timeParts.length != 2) {
             throw new IllegalArgumentException(
-                    "When does it end? Use: event <description> /from <start> /to <end>");
+                    "Missing the finish. Add /to followed by the end date and time.");
         }
 
         String description = eventParts[0].trim();
@@ -138,6 +140,14 @@ public class Parser {
         validateTaskField(description);
         validateTaskField(from);
         validateTaskField(to);
+
+        LocalDateTime start = DateTimes.parse(from);
+        LocalDateTime end = DateTimes.parse(to);
+
+        if (end.isBefore(start)) {
+            throw new IllegalArgumentException(
+                    "Wait, time travel? The event can't end before it starts.");
+        }
 
         addTask(new Event(description, from, to), tasks, ui);
     }

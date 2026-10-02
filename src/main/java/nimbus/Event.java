@@ -1,27 +1,54 @@
 package nimbus;
 
+import java.time.LocalDateTime;
+
 /**
- * Represents a task that starts and ends at specific dates/times.
+ * Represents a task with a start and end date/time.
+ * Previously saved text events remain readable.
  */
 public class Event extends Task {
     protected String from;
     protected String to;
 
+    private final LocalDateTime startDateTime;
+    private final LocalDateTime endDateTime;
+
     /**
-     * Creates an event task with the given description, start, and end date/time.
+     * Creates an event from date/time values or legacy saved text.
      *
-     * @param description Description of the task.
-     * @param from Date/time the event starts.
-     * @param to Date/time the event ends.
+     * @param description Event description.
+     * @param from Start date/time or legacy text.
+     * @param to End date/time or legacy text.
      */
     public Event(String description, String from, String to) {
         super(description);
-        this.from = from;
-        this.to = to;
+
+        this.startDateTime = parseSavedDateTime(from);
+        this.endDateTime = parseSavedDateTime(to);
+
+        this.from = startDateTime == null
+                ? from
+                : DateTimes.toStorage(startDateTime);
+        this.to = endDateTime == null
+                ? to
+                : DateTimes.toStorage(endDateTime);
     }
 
     /**
-     * Returns "E", the type icon for an event task.
+     * Parses saved date/time text, preserving compatibility with older records.
+     */
+    private LocalDateTime parseSavedDateTime(String text) {
+        try {
+            return DateTimes.parse(text);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the event task type icon.
+     *
+     * @return Event icon.
      */
     @Override
     public String getTypeIcon() {
@@ -29,10 +56,22 @@ public class Event extends Task {
     }
 
     /**
-     * Returns a string representation of this event, including its start and end date/time.
+     * Returns the event with readable start and end values.
+     *
+     * @return Formatted event task.
      */
     @Override
     public String toString() {
-        return super.toString() + " (from: " + from + " to: " + to + ")";
+        String displayedStart = startDateTime == null
+                ? from
+                : DateTimes.format(startDateTime);
+
+        String displayedEnd = endDateTime == null
+                ? to
+                : DateTimes.format(endDateTime);
+
+        return super.toString()
+                + " (from: " + displayedStart
+                + " to: " + displayedEnd + ")";
     }
 }
