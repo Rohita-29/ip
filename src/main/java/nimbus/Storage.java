@@ -13,7 +13,13 @@ import java.util.Scanner;
 public class Storage {
 
     private static final String FILE_PATH = "./data/nimbus.txt";
-
+    
+    /**
+     * Saves all supplied tasks, replacing the existing data file.
+     * Creates the parent directory if it does not exist.
+     *
+     * @param tasks Tasks to save.
+     */
     public static void saveTasks(ArrayList<Task> tasks) {
         try {
             File file = new File(FILE_PATH);
