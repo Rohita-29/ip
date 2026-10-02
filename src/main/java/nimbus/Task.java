@@ -3,7 +3,7 @@ package nimbus;
 /**
  * Represents a task with a description and a done/not-done status.
  */
-public  abstract class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 

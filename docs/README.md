@@ -149,7 +149,10 @@ been saved. Check that the folder is writable.
 ## Exiting
 
 ```text
-bye
+[mic drop]
+
+Instructions handled. Exit executed. Nimbus rocked!
+Too much work done today. Need my beauty sleep. BYEEEEEE!!!
 ```
 
 Nimbus displays its exit message and closes.
