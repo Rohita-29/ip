@@ -2,30 +2,32 @@
 
 **Sunglasses on. Briefcase loaded. Let's do business.**
 
-Nimbus is a command-line task manager. It keeps track of todos,
-deadlines, and events, and saves your tasks between sessions.
+Nimbus is a command-line task manager with main character energy.
+Add todos, deadlines, and events; find tasks; and track what you
+have completed. Your tasks are saved between sessions.
 
 ## Quick start
 
-1. Install Java 25.
+1. Install **Java 25**.
 2. Download `ip.jar` from the
    [latest release](https://github.com/Rohita-29/ip/releases/latest).
-3. Place it in a folder where you have permission to create files.
+3. Place the JAR in a folder where you have permission to create files.
 4. Open a terminal in that folder and run:
 
    ```bash
    java -jar ip.jar
    ```
 
-5. Enter one command at a time. Type `bye` to exit.
+5. Enter one command at a time.
+6. Type `bye` to exit.
 
 ## Command summary
 
 | Command | Format |
 |---------|--------|
 | Add a todo | `todo <description>` |
-| Add a deadline | `deadline <description> /by <date or time>` |
-| Add an event | `event <description> /from <start> /to <end>` |
+| Add a deadline | `deadline <description> /by <date/time>` |
+| Add an event | `event <description> /from <date/time> /to <date/time>` |
 | List tasks | `list` |
 | Find tasks | `find <keyword>` |
 | Mark completed | `mark <task number>` |
@@ -33,125 +35,317 @@ deadlines, and events, and saves your tasks between sessions.
 | Delete a task | `delete <task number>` |
 | Exit | `bye` |
 
-Do not type the angle brackets. Commands are lowercase.
+Replace values in angle brackets with your own information.
+Do not type the angle brackets. Command names are lowercase.
+
+## Date and time formats
+
+New deadlines and events accept these formats:
+
+| Format | Example | Meaning |
+|--------|---------|---------|
+| `yyyy-MM-dd` | `2026-10-03` | 3 October 2026 at midnight |
+| `yyyy-MM-dd HHmm` | `2026-10-03 1800` | 3 October 2026 at 6:00 PM |
+
+Use four digits for the year, two for the month and day, and four
+for the time. `HHmm` uses the 24-hour clock.
+
+Date-only input means **midnight at the start of that date**.
+For an end-of-day deadline, enter a time explicitly, such as
+`2026-10-03 2359`.
+
+Nimbus displays dates in a readable format:
+
+```text
+Oct 03 2026, 6:00 PM
+```
+
+Invalid dates and times, such as `2026-02-30` or `2500`, are rejected.
+
+Older saved tasks with text-based dates remain readable. New
+commands require the formats above. Nimbus does not send reminders
+or perform timezone conversion.
 
 ## Adding a todo
 
 A todo is a task without an attached date or time.
 
+**Format:**
+
+```text
+todo <description>
+```
+
+**Example:**
+
 ```text
 todo read book
 ```
 
-Nimbus adds the task and displays the number of tasks in your list.
+Nimbus adds the task and displays a confirmation:
+
+```text
+Booked. Briefcase business:
+  [T][ ] read book
+Tasks under management: 1
+```
+
+The description cannot be empty.
 
 ## Adding a deadline
 
-A deadline is a task with a due date or time.
+A deadline is a task with a due date and time.
+
+**Format:**
 
 ```text
-deadline submit assignment /by Friday 11:59pm
+deadline <description> /by <date/time>
 ```
 
-The description and the field after `/by` must not be empty.
-Dates and times are stored as text; Nimbus does not validate calendar
-dates or send reminders.
+**Example:**
+
+```text
+deadline submit assignment /by 2026-10-03 1800
+```
+
+The added task appears as:
+
+```text
+[D][ ] submit assignment (by: Oct 03 2026, 6:00 PM)
+```
+
+You can also enter a date without a time:
+
+```text
+deadline pay fees /by 2026-10-04
+```
+
+This means midnight at the start of 4 October 2026.
+
+The description and deadline must not be empty. Keep spaces
+around `/by`.
 
 ## Adding an event
 
-An event has a start and end.
+An event has a start and an end.
+
+**Format:**
 
 ```text
-event project meeting /from Friday 2pm /to Friday 4pm
+event <description> /from <date/time> /to <date/time>
+```
+
+**Example:**
+
+```text
+event project meeting /from 2026-10-03 1400 /to 2026-10-03 1600
+```
+
+The added task appears as:
+
+```text
+[E][ ] project meeting (from: Oct 03 2026, 2:00 PM to: Oct 03 2026, 4:00 PM)
 ```
 
 The description, start, and end must all be provided. Keep spaces
-around `/from` and `/to`. Times are stored as text.
+around `/from` and `/to`.
+
+Both date/time values are validated. An event cannot end before
+it starts. Equal start and end times are allowed.
 
 ## Listing tasks
+
+**Command:**
 
 ```text
 list
 ```
 
-Tasks are numbered from 1. For example:
+Nimbus displays your tasks, numbered from 1:
 
 ```text
+Here's the agenda:
 1. [T][ ] read book
-2. [D][X] submit assignment (by: Friday 11:59pm)
-3. [E][ ] project meeting (from: Friday 2pm to: Friday 4pm)
+2. [D][X] submit assignment (by: Oct 03 2026, 6:00 PM)
+3. [E][ ] project meeting (from: Oct 03 2026, 2:00 PM to: Oct 03 2026, 4:00 PM)
 ```
 
-`T`, `D`, and `E` identify todos, deadlines, and events.
-`[X]` means completed; `[ ]` means incomplete.
+The symbols mean:
+
+| Symbol | Meaning |
+|--------|---------|
+| `[T]` | Todo |
+| `[D]` | Deadline |
+| `[E]` | Event |
+| `[ ]` | Incomplete |
+| `[X]` | Completed |
+
+If there are no tasks, Nimbus displays an empty-list message.
 
 ## Finding tasks
+
+**Format:**
+
+```text
+find <keyword>
+```
+
+**Example:**
 
 ```text
 find book
 ```
 
-Nimbus displays tasks whose descriptions contain the search text.
+Nimbus searches task descriptions for the supplied text.
+
 Matching ignores case, so `find BOOK` also matches `read book`.
+A search can contain several words, which are matched as one
+continuous phrase. Dates and times are not searched.
 
-Results retain their original task numbers from `list`.
-An empty keyword produces an error; no matches produces a message.
+Results retain their **original task numbers** from `list`.
+Use those numbers when marking or deleting a matching task.
 
-## Marking and unmarking tasks
+An empty keyword produces an error. If nothing matches, Nimbus
+displays a no-matches message.
+
+## Marking tasks as completed
+
+**Format:**
+
+```text
+mark <task number>
+```
+
+**Example:**
 
 ```text
 mark 1
 ```
 
-Marks task 1 as completed.
+Nimbus marks task 1 as completed:
+
+```text
+Another one handled. Naturally:
+  [T][X] read book
+```
+
+The task remains in the list.
+
+## Marking tasks as incomplete
+
+**Format:**
+
+```text
+unmark <task number>
+```
+
+**Example:**
 
 ```text
 unmark 1
 ```
 
-Marks task 1 as incomplete. Use the task number shown by `list`
-or `find`.
+Nimbus marks task 1 as incomplete:
+
+```text
+We're reopening the case:
+  [T][ ] read book
+```
+
+Use a valid task number shown by `list` or `find`.
 
 ## Deleting tasks
+
+**Format:**
+
+```text
+delete <task number>
+```
+
+**Example:**
 
 ```text
 delete 1
 ```
 
-Permanently removes task 1. There is no undo command.
-Later tasks are renumbered, so run `list` again before selecting
-another task.
+Nimbus permanently removes task 1 and displays the number of
+remaining tasks.
+
+**There is no undo command.** Later tasks are renumbered after
+deletion. Run `list` again before choosing another task number.
 
 ## Saving and loading
 
 Nimbus automatically saves after adding, marking, unmarking,
 or deleting a task.
 
-Tasks are stored in `data/nimbus.txt`, relative to the folder from
-which you run the app. Nimbus creates the data folder when needed
-and loads saved tasks when it starts.
+Tasks are stored in:
+
+```text
+data/nimbus.txt
+```
+
+This path is relative to the folder from which you run the app.
+Nimbus creates the data folder when needed and loads saved tasks
+when it starts.
+
+New dates and times are saved in a consistent format and restored
+as date/time objects when the app loads them.
 
 Running the app from another folder uses a different data file.
 Keep the same working folder to continue using your existing list.
 
-If Nimbus reports a saving error, your latest changes may not have
-been saved. Check that the folder is writable.
+If Nimbus reports a saving error, your latest changes may not
+have been saved. Check that the folder is writable.
 
 ## Errors and input restrictions
 
+Nimbus displays an error message when a command is invalid.
+
+For example:
+
+```text
+delete 999
+```
+
+If task 999 does not exist:
+
+```text
+Wait a second...
+That task doesn't exist. Even I can't manage imaginary business.
+```
+
+Remember:
+
+- Command names are lowercase.
 - Task numbers must be integers corresponding to existing tasks.
-- Descriptions and required time fields cannot be empty.
+- Descriptions and required date/time fields cannot be empty.
+- New dates must use `yyyy-MM-dd` or `yyyy-MM-dd HHmm`.
+- Events cannot end before they start.
 - Task fields cannot contain ` | ` because it is reserved for storage.
-- Use the command formats shown above.
-- Avoid editing the saved data file manually; malformed records may
-  prevent Nimbus from starting.
+- Keep spaces around `/by`, `/from`, and `/to`.
+- Avoid editing the data file manually; malformed records may prevent
+  Nimbus from starting.
+
+If a command fails validation, correct it and enter it again.
 
 ## Exiting
+
+**Command:**
 
 ```text
 bye
 ```
 
-Nimbus displays its exit message and closes.
-Unfinished tasks remain available when you next run it from the
-same folder.
+Nimbus displays its exit message and closes:
+
+```text
+Instructions handled. Exit executed.
+Unfinished business? We pick it up next time.
+
+[mic drop]
+Nimbus has left the chat.
+```
+
+Unfinished tasks remain available when you next run Nimbus from
+the same folder.
