@@ -46,10 +46,14 @@ public class Parser {
                     ui.showMessage("Off the agenda. I don't chase cancelled plans:\n  " + removedTask);
                     ui.showMessage("Still on the radar: " + tasks.size());
                     break;
+                case "find":
+                    requireText(arguments, "Give me a lead. Use: find <keyword>");
+                    ui.showMatchingTasks(tasks, arguments);
+                    break;
                 default:
                     ui.showMessage("Wait a second...");
                     ui.showMessage("Who invited that command? Check the list below.");
-                    ui.showMessage("Use: todo, deadline, event, list, mark, unmark, delete, or bye.");
+                    ui.showMessage("Use: todo, deadline, event, list, find, mark, unmark, delete, or bye.");
             }
         } catch (IllegalArgumentException exception) {
             ui.showMessage("Wait a second...");

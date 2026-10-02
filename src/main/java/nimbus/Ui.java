@@ -97,4 +97,33 @@ public class Ui {
             showMessage((i + 1) + ". " + tasks.get(i));
         }
     }
+
+    /**
+     * Displays tasks whose descriptions contain the keyword, ignoring case.
+     *
+     * @param tasks Current task list.
+     * @param keyword Text to search for.
+     */
+    public void showMatchingTasks(TaskList tasks, String keyword) {
+        String searchText = keyword.toLowerCase(java.util.Locale.ROOT);
+        int matchCount = 0;
+
+        showMessage("Running the investigation...");
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            String description = task.getDescription().toLowerCase(java.util.Locale.ROOT);
+
+            if (description.contains(searchText)) {
+                showMessage((i + 1) + ". " + task);
+                matchCount++;
+            }
+        }
+
+        if (matchCount == 0) {
+            showMessage("No matches. Even my sources have nothing on that.");
+        } else {
+            showMessage("Case closed. Matches found: " + matchCount);
+        }
+    }
 }
