@@ -1,24 +1,41 @@
 package nimbus;
 
+import java.time.LocalDateTime;
+
 /**
- * Represents a task that needs to be done before a specific date/time.
+ * Represents a task with a due date and time.
+ * Previously saved text deadlines remain readable.
  */
 public class Deadline extends Task {
     protected String by;
+    private final LocalDateTime dueDateTime;
 
     /**
-     * Creates a deadline task with the given description and due date/time.
+     * Creates a deadline from a date/time or legacy saved text.
      *
-     * @param description Description of the task.
-     * @param by Date/time the task is due by.
+     * @param description Task description.
+     * @param by Due date/time or legacy deadline text.
      */
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+
+        LocalDateTime parsedDateTime;
+        try {
+            parsedDateTime = DateTimes.parse(by);
+        } catch (IllegalArgumentException exception) {
+            parsedDateTime = null;
+        }
+
+        this.dueDateTime = parsedDateTime;
+        this.by = parsedDateTime == null
+                ? by
+                : DateTimes.toStorage(parsedDateTime);
     }
 
     /**
-     * Returns "D", the type icon for a deadline task.
+     * Returns the deadline task type icon.
+     *
+     * @return Deadline icon.
      */
     @Override
     public String getTypeIcon() {
@@ -26,10 +43,16 @@ public class Deadline extends Task {
     }
 
     /**
-     * Returns a string representation of this deadline, including its due date/time.
+     * Returns the task with its readable deadline.
+     *
+     * @return Formatted deadline task.
      */
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by + ")";
+        String displayedDeadline = dueDateTime == null
+                ? by
+                : DateTimes.format(dueDateTime);
+
+        return super.toString() + " (by: " + displayedDeadline + ")";
     }
 }
