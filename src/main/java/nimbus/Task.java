@@ -45,6 +45,14 @@ public  abstract class Task {
      */
     public abstract String getTypeIcon();
 
+    /**
+     * Returns the task description.
+     *
+     * @return Task description.
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Returns a string representation of this task, showing its status icon and description.
