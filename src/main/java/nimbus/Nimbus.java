@@ -14,7 +14,8 @@ public class Nimbus {
      * @param args Command-line arguments (not used)
      */
     public static void main(String[] args) {
-        printWelcome();
+        Ui ui = new Ui();
+        ui.showWelcome();
 
         ArrayList<Task> tasks = Storage.loadTasks();
 
@@ -26,22 +27,10 @@ public class Nimbus {
             }
             handleCommand(input, tasks);
         }
-        System.out.println("Bye! Hope to see you again!");
+        ui.showGoodbye();
         scanner.close();
     }
-    /**
-     * Prints the banner and greeting shown when Nimbus starts.
-     */
-    private static void printWelcome() {
-        String banner = " _   _ _           _               \n"
-                + "| \\ | (_)_ __ ___ | |__  _   _ ___ \n"
-                + "|  \\| | | '_ ` _ \\| '_ \\| | | / __|\n"
-                + "| |\\  | | | | | | | |_) | |_| \\__ \\\n"
-                + "|_| \\_|_|_| |_| |_|_.__/ \\__,_|___/\n";
-        System.out.println(banner);
-        System.out.println("Hello! I'm Nimbus.");
-        System.out.println("What can I do for you?");
-    }
+
 
     /**
      * Interprets a single line of user input and carries out the matching command.
