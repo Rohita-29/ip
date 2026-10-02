@@ -14,7 +14,13 @@ public class Nimbus {
      */
     public static void main(String[] args) {
         Ui ui = new Ui();
-        TaskList tasks = new TaskList(Storage.loadTasks());
+        TaskList tasks;
+        try {
+            tasks = new TaskList(Storage.loadTasks());
+        } catch (IllegalStateException exception) {
+            ui.showMessage(exception.getMessage());
+            return;
+        }
         Parser parser = new Parser();
 
         ui.showWelcome();

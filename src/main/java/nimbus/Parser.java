@@ -59,6 +59,8 @@ public class Parser {
         } catch (IllegalArgumentException exception) {
             ui.showMessage("Wait a second...");
             ui.showMessage(exception.getMessage());
+        }catch (IllegalStateException exception) {
+            ui.showMessage(exception.getMessage());
         }
     }
 

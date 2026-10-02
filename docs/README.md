@@ -295,8 +295,10 @@ as date/time objects when the app loads them.
 Running the app from another folder uses a different data file.
 Keep the same working folder to continue using your existing list.
 
-If Nimbus reports a saving error, your latest changes may not
-have been saved. Check that the folder is writable.
+If saving fails, Nimbus reports that your latest change exists only
+in memory. Check that the data file and folder are writable.
+A later successful task change saves the current list.
+Exiting before a successful save loses unsaved changes.
 
 ## Errors and input restrictions
 
@@ -324,8 +326,9 @@ Remember:
 - Events cannot end before they start.
 - Task fields cannot contain `|` because it is reserved for storage.
 - Keep spaces around `/by`, `/from`, and `/to`.
-- Avoid editing the data file manually; malformed records may prevent
-  Nimbus from starting.
+- If a saved record is malformed, Nimbus reports its line number and
+  stops without changing the data file. Back up `data/nimbus.txt`,
+  then repair the reported line or restore a working backup.
 
 If a command fails validation, correct it and enter it again.
 
