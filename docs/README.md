@@ -322,7 +322,7 @@ Remember:
 - Descriptions and required date/time fields cannot be empty.
 - New dates must use `yyyy-MM-dd` or `yyyy-MM-dd HHmm`.
 - Events cannot end before they start.
-- Task fields cannot contain ` | ` because it is reserved for storage.
+- Task fields cannot contain `|` because it is reserved for storage.
 - Keep spaces around `/by`, `/from`, and `/to`.
 - Avoid editing the data file manually; malformed records may prevent
   Nimbus from starting.
@@ -334,20 +334,16 @@ If a command fails validation, correct it and enter it again.
 **Command:**
 
 ```text
-[mic drop]
-
-Instructions handled. Exit executed. Nimbus rocked!
-Too much work done today. Need my beauty sleep. BYEEEEEE!!!
+bye
 ```
 
 Nimbus displays its exit message and closes:
 
 ```text
-Instructions handled. Exit executed.
-Unfinished business? We pick it up next time.
-
 [mic drop]
-Nimbus has left the chat.
+
+Instructions handled. Exit executed. Nimbus rocked!
+Too much work done today. Need my beauty sleep. BYEEEEEE!!!
 ```
 
 Unfinished tasks remain available when you next run Nimbus from

@@ -77,9 +77,8 @@ public class Parser {
     private void validateTaskField(String text) {
         requireText(text, "An empty brief? Give me something to work with.");
 
-        if (text.contains(" | ")) {
-            throw new IllegalArgumentException(
-                    "' | ' is reserved for my filing system. Keep it out of task fields.");
+        if (text.contains("|")) {
+            throw new IllegalArgumentException("'|' is reserved for my filing system. Keep it out of task fields.");
         }
     }
 
