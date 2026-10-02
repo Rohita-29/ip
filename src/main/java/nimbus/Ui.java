@@ -47,7 +47,7 @@ public class Ui {
                 *=+@@@@@@@@+=%%#@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@%#*++*%@@@@@@@@@@@@
                 @%@@@@@@@@@%#@%#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%#***%@@@@@@@@@@@@@
                 """;
-
+        System.out.println();
         System.out.println(mascot);
         System.out.println("Mr. Bombastic, call me fantastic...");
         System.out.println();
@@ -70,5 +70,31 @@ public class Ui {
         System.out.println("Instructions handled. Exit executed. Nimbus rocked!");
         System.out.println("Too much work done today. Need my beauty sleep. BYEEEEEE!!!");
 
+    }
+
+    /**
+     * Displays a response to the user.
+     *
+     * @param message Response to display.
+     */
+    public void showMessage(String message) {
+        System.out.println(message);
+    }
+
+    /**
+     * Displays the numbered task list.
+     *
+     * @param tasks Tasks to display.
+     */
+    public void showTaskList(TaskList tasks) {
+        if (tasks.size() == 0) {
+            showMessage("No tasks. An unusually quiet day at headquarters.");
+            return;
+        }
+
+        showMessage("Here's the agenda:");
+        for (int i = 0; i < tasks.size(); i++) {
+            showMessage((i + 1) + ". " + tasks.get(i));
+        }
     }
 }
