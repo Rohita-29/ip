@@ -1,6 +1,5 @@
 package nimbus;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,7 +16,7 @@ public class Nimbus {
         Ui ui = new Ui();
         ui.showWelcome();
 
-        ArrayList<Task> tasks = Storage.loadTasks();
+        TaskList tasks = new TaskList(Storage.loadTasks());
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -38,7 +37,7 @@ public class Nimbus {
      * @param input Line of input entered by the user.
      * @param tasks List of tasks stored so far.
      */
-    private static void handleCommand(String input, ArrayList<Task> tasks) {
+    private static void handleCommand(String input, TaskList tasks) {
         if (input.equals("list")) {
             printTaskList(tasks);
         } else if (input.startsWith("mark ")) {
@@ -83,7 +82,7 @@ public class Nimbus {
      *
      *  @param tasks List of tasks stored so far.
      */
-    private static void printTaskList(ArrayList<Task> tasks) {
+    private static void printTaskList(TaskList tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
@@ -96,7 +95,7 @@ public class Nimbus {
      * @param indexText 1-based task number, as typed by the user.
      * @param isDone True to mark the task as done, false to mark it as not done.
      */
-    private static void markTask(ArrayList<Task> tasks, String indexText, boolean isDone) {
+    private static void markTask(TaskList tasks, String indexText, boolean isDone) {
         int index;
         try {
             index = Integer.parseInt(indexText) - 1;
@@ -117,7 +116,8 @@ public class Nimbus {
             System.out.println("OK, I've marked this task as not done yet:");
         }
         System.out.println("  " + tasks.get(index));
-        Storage.saveTasks(tasks);
+
+        tasks.save();
 
     }
 
@@ -127,7 +127,7 @@ public class Nimbus {
      * @param tasks List of tasks stored so far.
      * @param task Task to add.
      */
-    private static void addTask(ArrayList<Task> tasks, Task task) {
+    private static void addTask(TaskList tasks, Task task) {
         tasks.add(task);
 
         System.out.println("Got it. I've added this task:");
@@ -135,7 +135,7 @@ public class Nimbus {
 
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
 
-        Storage.saveTasks(tasks);
+        tasks.save();
     }
 
     /**
@@ -144,7 +144,7 @@ public class Nimbus {
      * @param tasks List of tasks stored so far.
      * @param indexText 1-based task number, as typed by the user.
      */
-    private static void deleteTask(ArrayList<Task> tasks, String indexText) {
+    private static void deleteTask(TaskList tasks, String indexText) {
         int index;
 
         try {
@@ -165,7 +165,7 @@ public class Nimbus {
         System.out.println("  " + removedTask);
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
 
-        Storage.saveTasks(tasks);
+        tasks.save();
     }
 
 }
