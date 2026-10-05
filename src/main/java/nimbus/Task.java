@@ -1,7 +1,7 @@
 package nimbus;
 
 /**
- * Represents a task with a description and a done/not-done status.
+ * Creates a task with the given description. The task starts off as not done.
  */
 public abstract class Task {
     protected String description;
